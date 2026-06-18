@@ -8,7 +8,7 @@
 
 # Benchmark  
 To run the project and reproduce the benchmark
-open benchmark.html with link bellow:
+open benchmark.html with link:
 [Benchmark Link](https://reventerprise.github.io/EF234405_DAA_FIN_5025241104_Raden-Kurniawan-Agung-Fitrianto_5025241058_Addien-Zafriyan-Al-Akhsan/benchmark.html)
 
 # Benchmark Tutorial  
@@ -48,7 +48,8 @@ Benchmark result
 </p>
 
 # Website 
-
+To run the website
+open index.html with link:
 [Website Link](https://reventerprise.github.io/EF234405_DAA_FIN_5025241104_Raden-Kurniawan-Agung-Fitrianto_5025241058_Addien-Zafriyan-Al-Akhsan/)
 
 # Website Tutorial  
