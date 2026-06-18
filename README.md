@@ -6,10 +6,10 @@
 | Raden Kurniawan Agung Fitrianto | 5025241104 | B |
 
 
-# Beachmark  
+# Benchmark  
 [Beachmark Link](https://reventerprise.github.io/EF234405_DAA_FIN_5025241104_Raden-Kurniawan-Agung-Fitrianto_5025241058_Addien-Zafriyan-Al-Akhsan/benchmark.html)
 
-# Beachmark Tutorial  
+# Benchmark Tutorial  
 - Use preset number of nodes (1.000, 5.000, 10.000+) 
 - Use the preset starting location and destination 
 - Run the benchmark
@@ -24,7 +24,7 @@ This has already been preset.
 | 10.000 | [824.4548226413915, 703.2638977179685] | [127.88505594841665, 95.77207809443428] | 
 
 
-Beachmark result
+Benchmark result
 | V (Nodes) | BFS Time | BFS Visited | BFS Weight | Dijkstra Time | Dijkstra Visited | Dijkstra Weight | A* Time | A* Visited | A* Weight |
 |----------|----------|-------------|------------|---------------|------------------|-----------------|---------|------------|-----------|
 | 1,000    | 0.3 ms   | 934         | 5623       | 1.3 ms        | 934              | 5623            | 1.1 ms  | 934        | 5623      |
