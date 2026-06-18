@@ -18,7 +18,7 @@
 - Change to other algorithm for that number of nodes
 - After all three algorithm done, change the number of nodes
 - Finished
-
+## Beachmark Visualization  
 <p>
 <img width="244" height="144" alt="image" src="https://github.com/user-attachments/assets/d454af8c-7678-4708-ac3d-29579a3ad44c" />  
 <br>(Preset number of nodes)  
