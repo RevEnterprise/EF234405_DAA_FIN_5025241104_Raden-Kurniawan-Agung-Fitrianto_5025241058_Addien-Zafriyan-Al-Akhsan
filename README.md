@@ -7,8 +7,7 @@
 
 
 # Beachmark  
-
-[Beachmark Link](https://reventerprise.github.io/EF234405_DAA_FIN_5025241104_Raden-Kurniawan-Agung-Fitrianto_5025241058_Addien-Zafriyan-Al-Akhsan/](https://reventerprise.github.io/EF234405_DAA_FIN_5025241104_Raden-Kurniawan-Agung-Fitrianto_5025241058_Addien-Zafriyan-Al-Akhsan/benchmark.html)
+[Beachmark Link](https://reventerprise.github.io/EF234405_DAA_FIN_5025241104_Raden-Kurniawan-Agung-Fitrianto_5025241058_Addien-Zafriyan-Al-Akhsan/benchmark.html)
 
 # Website Tutorial  
 - Use preset number of nodes (1.000, 5.000, 10.000+) or with a producal map generator, create a new number of nodes
