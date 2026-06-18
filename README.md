@@ -12,19 +12,34 @@
 # Beachmark Tutorial  
 - Use preset number of nodes (1.000, 5.000, 10.000+) 
 - Use the preset starting location and destination 
-- Run it
+- Run the benchmark
 - Change to other algorithm for that number of nodes
 - After all three algorithm done, change the number of nodes
-
+This has already been preset. 
 | V (Nodes)           | Starting        |   Destination   |
 | ---            | ---        | ----------|
 | 1.000 | [710, 2717] | [3387, 70] |
 | 5.000 | [102, 2888] | [3439, 252] |  
 | 10.000 | [824.4548226413915, 703.2638977179685] | [127.88505594841665, 95.77207809443428] | 
-^^This has already been preset. 
 
-## Wesbite Visualization  
+Beachmark result
+| V (Nodes) | BFS Time | BFS Visited | BFS Weight | Dijkstra Time | Dijkstra Visited | Dijkstra Weight | A* Time | A* Visited | A* Weight |
+|----------|----------|-------------|------------|---------------|------------------|-----------------|---------|------------|-----------|
+| 1,000    | 0.3 ms   | 934         | 5623       | 1.3 ms        | 934              | 5623            | 1.1 ms  | 934        | 5623      |
+| 5,000    | 1.5 ms   | 4526        | 5244       | 56 ms         | 4521             | 5219            | 23.9 ms | 2665       | 5219      |
+| 10,000   | 2.4 ms   | 10310       | 1396...    | 324.9 ms      | 9944             | 1384...         | 121.4 ms| 6057       | 1384...   | 
+
+
+## Benchmark Visualization  
 <p>
+<img width="257" height="452" alt="image" src="https://github.com/user-attachments/assets/0984e360-f511-4c95-a24f-3196710a4267" />
+<br>(Benchmark result)
+</p>
+
+<p>
+<img width="194" height="554" alt="image" src="https://github.com/user-attachments/assets/f530ecb8-4c7d-4700-bc82-2d69ae54f9be" />
+<br>(Benchmark control)
+</p>
 
 # Website 
 
