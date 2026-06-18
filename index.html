@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathfinding Visualizer</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <div id="navbar">
+        Pathfinding Visualizer
+    </div>
+
+    <!-- APP -->
+    <div id="app">
+
+        <!-- LEFT PANEL -->
+        <div id="leftPanel">
+            <label for="mapPresetSelect">Presets:</label>
+            <select id="mapPresetSelect">
+                <option value="surabaya" selected>Surabaya (10,000+ Nodes)</option>
+                <option value="nodes5000">5.000 Nodes</option>
+                <option value="nodes1000">1.000 Nodes</option>
+            </select>
+
+            <label style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #cbd5e1;">Starting Node:</label>
+            <div class="input-container">
+                <input type="text" id="startNodeInput" placeholder="Right-click map to set..." readonly>
+                <button id="clearStartBtn" class="trash-btn" title="Clear Starting Node">X</button>
+            </div>
+
+            <label>Destination Node:</label>
+            <div class="input-container">
+                <input type="text" id="destinationNodeInput" placeholder="Right-click map to set..." readonly>
+                <button id="clearDestBtn" class="trash-btn" title="Clear Destination Node">X</button>
+            </div>
+
+            <label for="algorithmSelect">Algorithm:</label>
+            <select id="algorithmSelect">
+                <option value="dijkstra">Dijkstra's Algorithm</option>
+                <option value="bfs">Breadth-First Search (BFS)</option>
+                <option value="astar">A* Search Algorithm</option>
+            </select>
+
+            <button id="startBtn">Start</button>
+            <button id="resetBtn">Reset</button>
+
+            <div class="generator-section" style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #cbd5e1; display: flex; flex-direction: column; gap: 8px;">
+                <h4 style="margin: 0 0 10px 0; color: #2d3748;">Procedural Map Generator</h4>
+                <label for="nodeCountInput">Number of Nodes:</label>
+                <input type="number" id="nodeCountInput" value="5000" min="10" max="25000" style="width: 100%; padding: 8px; border: 1px solid #cbd5e0; border-radius: 4px; margin-bottom: 4px;">
+                <button id="generateBtn">Generate New Map</button>
+                <!-- <button id="saveMapBtn">Save Map (JSON)</button> -->
+            </div>
+        </div>
+
+        <!-- MIDDLE PANEL -->
+        <div id="middlePanel">
+            <div id="canvasContainer">
+                <canvas id="roadNetworkCanvas"></canvas>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL -->
+        <div id="rightPanel">
+            <h3>Playback Control</h3>
+            <div id="stepControls" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <button id="playPauseBtn" style="flex: 1; padding: 10px;" disabled>▶ Play</button>
+                <button id="stepResetBtn" style="padding: 10px;">↺ Reset</button>
+            </div>
+
+            <div style="width: 100%;">
+                <input type="range" id="timelineSlider" min="0" max="0" value="0" style="width: 100%; cursor: pointer;" disabled>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; color: #718096; margin-top: 6px; font-family: monospace;">
+                    <span>Progress:</span>
+                    <span id="stepIndicator">0 / 0</span>
+                </div>
+            </div>
+
+            <div id="statsPanel" style="margin-top: 25px; border-top: 1px solid #e2e8f0; padding-top: 15px;">
+                <h4 style="margin: 0 0 10px 0; color: #2d3748;">Search Statistics</h4>
+                <div style="font-size: 14px; color: #4a5568; display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span>Total Nodes Visited:</span>
+                    <strong id="totalVisitedCount" style="color: #2b6cb0;">0</strong>
+                </div>
+                <div style="font-size: 14px; color: #4a5568; display: flex; justify-content: space-between;">
+                    <span>Total Path Weight:</span>
+                    <strong id="totalPathWeight" style="color: #319795;">0</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTEXT MENU -->
+    <div id="contextMenu"></div>
+
+    <!-- TOAST -->
+    <div id="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
