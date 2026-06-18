@@ -7,16 +7,20 @@
 
 
 # Benchmark  
+To run the project and reproduce the benchmark
+open benchmark.html with link bellow:
 [Benchmark Link](https://reventerprise.github.io/EF234405_DAA_FIN_5025241104_Raden-Kurniawan-Agung-Fitrianto_5025241058_Addien-Zafriyan-Al-Akhsan/benchmark.html)
 
 # Benchmark Tutorial  
-- Use preset number of nodes (1.000, 5.000, 10.000+) 
-- Use the preset starting location and destination 
-- Run the benchmark
-- Change to other algorithm for that number of nodes
-- After all three algorithm done, change the number of nodes
+- Open the benchmark.html
+- Use preset number of nodes (1.000, 5.000, 10.000+)
+- Keep the default starting and destination nodes (automatically set)
+- Click Run Benchmark
+- Record all benchmark data (Time (ms), Nodes Visited, Path Weight) for all algorithm 
+- Repeat for all three algorithms
+- Move to next node size
 
-This has already been preset. 
+Preset Benchmark Configuration
 | V (Nodes)           | Starting        |   Destination   |
 | ---            | ---        | ----------|
 | 1.000 | [710, 2717] | [3387, 70] |
@@ -48,12 +52,12 @@ Benchmark result
 [Website Link](https://reventerprise.github.io/EF234405_DAA_FIN_5025241104_Raden-Kurniawan-Agung-Fitrianto_5025241058_Addien-Zafriyan-Al-Akhsan/)
 
 # Website Tutorial  
+- Open website (index.html)
 - Use preset number of nodes (1.000, 5.000, 10.000+) or with a producal map generator, create a new number of nodes
 - Pick an algorithm for that number of nodes (BFS, Dijkstra, A*)
-- Use the preset starting location and destination or right-click on the map to assign the starting & destination point 
-- Run it
-- Change to other algorithm for that number of nodes
-- After all three algorithm done, change the number of nodes
+- Use the preset starting location and destination or right-click on the map to assign new starting & destination point 
+- Click Start
+- Repeat if you like
 ## Wesbite Visualization  
 <p>
 <img width="244" height="144" alt="image" src="https://github.com/user-attachments/assets/d454af8c-7678-4708-ac3d-29579a3ad44c" />  
