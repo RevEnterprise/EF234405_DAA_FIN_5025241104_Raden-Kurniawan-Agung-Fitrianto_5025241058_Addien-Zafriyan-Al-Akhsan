@@ -21,8 +21,8 @@
 
 
 <img width="244" height="144" alt="image" src="https://github.com/user-attachments/assets/d454af8c-7678-4708-ac3d-29579a3ad44c" />
-(Preset number of nodes \
-)<img width="239" height="148" alt="image" src="https://github.com/user-attachments/assets/9e139945-9ba4-484a-b9b1-24da241b85dd" />
+(Preset number of nodes)  
+<img width="239" height="148" alt="image" src="https://github.com/user-attachments/assets/9e139945-9ba4-484a-b9b1-24da241b85dd" />
 (Preset algorithm) \
 - <img width="253" height="152" alt="image" src="https://github.com/user-attachments/assets/060fc363-c2ae-47ce-a7dd-a379611aef63" />
 (Preset starting and destination location, different for each algorithm or V, but same for the same algorithm & same V, refeshing will go back to default benchmark preset location) \   
