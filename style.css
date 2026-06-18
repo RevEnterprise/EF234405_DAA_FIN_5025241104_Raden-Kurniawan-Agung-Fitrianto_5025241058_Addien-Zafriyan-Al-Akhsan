@@ -31,6 +31,22 @@ button:disabled {
     opacity: 0.4;
     cursor: not-allowed;
 }
+select,
+input {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #f8fafc;
+    transition: 0.2s;
+}
+select:focus,
+input:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
+}
 
 /* ---------- NAVBAR ---------- */
 #navbar {
@@ -89,22 +105,6 @@ button:disabled {
     font-size: 14px;
     color: #2c3e50;
     letter-spacing: 0.3px;
-}
-#leftPanel select,
-#leftPanel input {
-    width: 100%;
-    padding: 8px 10px;
-    font-size: 14px;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    background: #f8fafc;
-    transition: 0.2s;
-}
-#leftPanel select:focus,
-#leftPanel input:focus {
-    outline: none;
-    border-color: #4a90e2;
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
 }
 .input-container {
     display: flex;
