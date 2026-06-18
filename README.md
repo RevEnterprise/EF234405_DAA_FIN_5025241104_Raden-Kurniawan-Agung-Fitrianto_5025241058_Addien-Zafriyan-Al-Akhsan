@@ -15,12 +15,14 @@
 - Run the benchmark
 - Change to other algorithm for that number of nodes
 - After all three algorithm done, change the number of nodes
+
 This has already been preset. 
 | V (Nodes)           | Starting        |   Destination   |
 | ---            | ---        | ----------|
 | 1.000 | [710, 2717] | [3387, 70] |
 | 5.000 | [102, 2888] | [3439, 252] |  
 | 10.000 | [824.4548226413915, 703.2638977179685] | [127.88505594841665, 95.77207809443428] | 
+
 
 Beachmark result
 | V (Nodes) | BFS Time | BFS Visited | BFS Weight | Dijkstra Time | Dijkstra Visited | Dijkstra Weight | A* Time | A* Visited | A* Weight |
