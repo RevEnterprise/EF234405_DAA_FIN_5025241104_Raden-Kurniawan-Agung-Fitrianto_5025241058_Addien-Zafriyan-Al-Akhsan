@@ -52,6 +52,18 @@ button:disabled {
     margin-left: auto;
 }
 
+.nav-link {
+    margin-left: auto;
+    font-size: 14px;
+    color: white;
+    text-decoration: none; /* Starts without underline */
+    transition: text-decoration 0.2s; /* Optional: adds a smooth effect */
+}
+
+.nav-link:hover {
+    text-decoration: underline; /* Adds underline on hover */
+}
+
 /* ---------- MAIN LAYOUT ---------- */
 #app {
     display: flex;

@@ -22,6 +22,13 @@ let startNodeKey = null;
 let destinationNodeKey = null;
 let selectedNodeFromContext = null;
 
+// Benchmark Execution Storage Registry
+let benchmarkCache = {
+    dijkstra: null,
+    bfs: null,
+    astar: null
+};
+
 // Zoom & Pan transformation state
 let transform = { scale: 1, offsetX: 0, offsetY: 0 };
 let isDragging = false;
@@ -41,12 +48,14 @@ let minX = Infinity, maxX = -Infinity;
 let minY = Infinity, maxY = -Infinity;
 const padding = 50; 
 
-// 3. Dynamic Preset Switcher & Loader Pipeline
+// Dynamic Preset Switcher & Loader Pipeline
 async function switchMapPreset(presetKey) {
     const config = MAP_PRESETS[presetKey];
     if (!config) return;
 
-    window.clearStepTimeline();
+    if (typeof window.clearStepTimeline === 'function') window.clearStepTimeline();
+    clearStatsTable();
+    
     await loadGraphData(config.file);
     calculateBounds();
 
@@ -56,6 +65,7 @@ async function switchMapPreset(presetKey) {
     document.getElementById('startNodeInput').value = startNodeKey;
     document.getElementById('destinationNodeInput').value = destinationNodeKey;
 
+    // Reset view position to center the network map layout
     transform = { scale: 1, offsetX: 0, offsetY: 0 };
     drawNetwork();
 }
@@ -128,7 +138,7 @@ function filterMainConnectedComponent() {
     graphData.nodes = filteredNodes;
 }
 
-// 4. Agent-Based Procedural Generation Engine (For custom local generation overrides)
+// Agent-Based Procedural Generation Engine
 function generateProceduralGraph(nodeCount) {
     const widthBounds = 4000;  
     const heightBounds = 3000;
@@ -263,28 +273,16 @@ function generateProceduralGraph(nodeCount) {
     startNodeKey = null; destinationNodeKey = null;
     document.getElementById('startNodeInput').value = '';
     document.getElementById('destinationNodeInput').value = '';
-    window.clearStepTimeline();
+    
+    if (typeof window.clearStepTimeline === 'function') window.clearStepTimeline();
+    clearStatsTable();
     
     document.getElementById('mapPresetSelect').value = "";
     
     calculateBounds();
-    // Reset transform matrix on custom generation too
     transform = { scale: 1, offsetX: 0, offsetY: 0 };
     drawNetwork();
     showToast(`Successfully generated organic infrastructure with ${nodesList.length} nodes!`);
-}
-
-function saveGraphToFile() {
-    if (!graphData || Object.keys(graphData.nodes).length === 0) {
-        return showToast("No map network configuration available to save.");
-    }
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(graphData, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", "graph_data.json");
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
 }
 
 // Transform Projections (Accounts for scaling + Pan/Zoom offsets)
@@ -550,14 +548,71 @@ function calculateTotalPathWeight(path) {
     return sum;
 }
 
+// Updated UI Modifier Hook
+function updateStatsUI(algoKey, visitedCount, pathWeight, timeMs) {
+    // Single View targets (index.html)
+    const totalVisitedCount = document.getElementById('totalVisitedCount');
+    const totalPathWeight = document.getElementById('totalPathWeight');
+    const totalExecutionTime = document.getElementById('totalExecutionTime');
+    
+    if (totalVisitedCount) totalVisitedCount.textContent = visitedCount;
+    if (totalPathWeight) totalPathWeight.textContent = pathWeight;
+    if (totalExecutionTime) {
+        totalExecutionTime.textContent = typeof timeMs === 'number' ? `${timeMs.toFixed(2)} ms` : timeMs;
+    }
+
+    // Multi-matrix View targets (benchmark.html)
+    const timeEl = document.getElementById(`time-${algoKey}`);
+    const visitedEl = document.getElementById(`visited-${algoKey}`);
+    const weightEl = document.getElementById(`weight-${algoKey}`);
+    
+    if (timeEl) timeEl.textContent = typeof timeMs === 'number' ? `${timeMs.toFixed(2)} ms` : timeMs;
+    if (visitedEl) visitedEl.textContent = visitedCount;
+    if (weightEl) weightEl.textContent = pathWeight;
+}
+
+function clearStatsTable() {
+    const totalVisitedCount = document.getElementById('totalVisitedCount');
+    const totalPathWeight = document.getElementById('totalPathWeight');
+    const totalExecutionTime = document.getElementById('totalExecutionTime');
+    
+    if (totalVisitedCount) totalVisitedCount.textContent = '0';
+    if (totalPathWeight) totalPathWeight.textContent = '0';
+    if (totalExecutionTime) totalExecutionTime.textContent = '-';
+
+    ['dijkstra', 'bfs', 'astar'].forEach(id => {
+        const t = document.getElementById(`time-${id}`);
+        const v = document.getElementById(`visited-${id}`);
+        const w = document.getElementById(`weight-${id}`);
+        if (t) t.textContent = '-';
+        if (v) v.textContent = '-';
+        if (w) w.textContent = '-';
+    });
+}
+
+function clearStatsTable() {
+    const totalVisitedCount = document.getElementById('totalVisitedCount');
+    const totalPathWeight = document.getElementById('totalPathWeight');
+    if (totalVisitedCount) totalVisitedCount.textContent = '0';
+    if (totalPathWeight) totalPathWeight.textContent = '0';
+
+    ['dijkstra', 'bfs', 'astar'].forEach(id => {
+        const t = document.getElementById(`time-${id}`);
+        const v = document.getElementById(`visited-${id}`);
+        const w = document.getElementById(`weight-${id}`);
+        if (t) t.textContent = '-';
+        if (v) v.textContent = '-';
+        if (w) w.textContent = '-';
+    });
+}
+
 // Playback Recording Timeline Controller
 function setupStepControls() {
     const playPauseBtn = document.getElementById('playPauseBtn');
     const resetBtn = document.getElementById('stepResetBtn');
     const timelineSlider = document.getElementById('timelineSlider');
     const indicator = document.getElementById('stepIndicator');
-    const totalVisitedCount = document.getElementById('totalVisitedCount');
-    const totalPathWeightField = document.getElementById('totalPathWeight');
+    const playbackAlgoSelect = document.getElementById('playbackAlgoSelect');
 
     let isPlaying = false; let playbackInterval = null; const speedMs = 15; 
 
@@ -567,7 +622,7 @@ function setupStepControls() {
         drawNetwork();
     }
 
-    function play() {
+    window.startPlaybackAnimation = function() {
         if (currentStep >= totalSteps) currentStep = 0;
         isPlaying = true;
         playPauseBtn.textContent = '⏸ Pause';
@@ -576,44 +631,75 @@ function setupStepControls() {
                 currentStep++;
                 updateStepUI();
             } else {
-                pause();
+                window.pausePlaybackAnimation();
             }
         }, speedMs);
-    }
+    };
 
-    function pause() {
+    window.pausePlaybackAnimation = function() {
         isPlaying = false;
         playPauseBtn.textContent = '▶ Play';
         clearInterval(playbackInterval);
-    }
+    };
 
     playPauseBtn.addEventListener('click', () => {
-        if (isPlaying) pause();
-        else play();
+        if (isPlaying) window.pausePlaybackAnimation();
+        else window.startPlaybackAnimation();
     });
 
     resetBtn.addEventListener('click', () => {
-        pause(); currentStep = 0; updateStepUI();
+        window.pausePlaybackAnimation(); currentStep = 0; updateStepUI();
     });
 
     timelineSlider.addEventListener('input', (e) => {
-        pause(); currentStep = parseInt(e.target.value, 10); updateStepUI();
+        window.pausePlaybackAnimation(); currentStep = parseInt(e.target.value, 10); updateStepUI();
     });
 
-    window.initStepTimeline = function(data) {
-        pause(); stepsData = data; currentStep = 0; totalSteps = data.visited.length;
-        totalVisitedCount.textContent = totalSteps;
-        totalPathWeightField.textContent = data.path.length > 0 ? calculateTotalPathWeight(data.path) : "Unreachable";
-        timelineSlider.max = totalSteps; timelineSlider.value = 0;
-        timelineSlider.disabled = totalSteps === 0; playPauseBtn.disabled = totalSteps === 0;
-        updateStepUI(); play(); 
+    if (playbackAlgoSelect) {
+        playbackAlgoSelect.addEventListener('change', (e) => {
+            const algoKey = e.target.value;
+            const algoData = benchmarkCache[algoKey];
+            if (algoData) {
+                window.loadSelectedPlayback(algoData);
+            }
+        });
+    }
+
+    window.loadSelectedPlayback = function(data) {
+        window.pausePlaybackAnimation();
+        stepsData = data;
+        currentStep = 0;
+        totalSteps = data.visited.length;
+
+        timelineSlider.max = totalSteps;
+        timelineSlider.value = 0;
+        timelineSlider.disabled = totalSteps === 0;
+        playPauseBtn.disabled = totalSteps === 0;
+
+        updateStepUI();
+    };
+
+    window.initStepTimeline = function(singleResultData = null) {
+        if (playbackAlgoSelect) {
+            playbackAlgoSelect.disabled = false;
+            playbackAlgoSelect.value = 'astar';
+            window.loadSelectedPlayback(benchmarkCache['astar']);
+        } else if (singleResultData) {
+            window.loadSelectedPlayback(singleResultData);
+        }
+        window.startPlaybackAnimation();
     };
     
     window.clearStepTimeline = function() {
-        pause(); stepsData = { visited: [], path: [] }; currentStep = 0; totalSteps = 0;
-        totalVisitedCount.textContent = '0'; totalPathWeightField.textContent = '0';
-        timelineSlider.max = 0; timelineSlider.value = 0;
-        timelineSlider.disabled = true; playPauseBtn.disabled = true;
+        window.pausePlaybackAnimation();
+        stepsData = { visited: [], path: [] };
+        currentStep = 0;
+        totalSteps = 0;
+        timelineSlider.max = 0;
+        timelineSlider.value = 0;
+        timelineSlider.disabled = true;
+        playPauseBtn.disabled = true;
+        if (playbackAlgoSelect) playbackAlgoSelect.disabled = true;
         updateStepUI();
     };
 }
@@ -644,7 +730,8 @@ function setupContextMenu() {
 
     contextMenu.addEventListener('click', (e) => {
         if (!selectedNodeFromContext) return;
-        window.clearStepTimeline();
+        if (typeof window.clearStepTimeline === 'function') window.clearStepTimeline();
+        clearStatsTable();
 
         if (e.target.id === 'setStartOpt') {
             if (selectedNodeFromContext === destinationNodeKey) return showToast("Cannot mirror nodes!");
@@ -662,18 +749,17 @@ function setupContextMenu() {
 function setupInputControls() {
     document.getElementById('clearStartBtn').addEventListener('click', () => {
         startNodeKey = null; document.getElementById('startNodeInput').value = '';
-        window.clearStepTimeline(); drawNetwork();
+        if (typeof window.clearStepTimeline === 'function') window.clearStepTimeline(); clearStatsTable(); drawNetwork();
     });
     document.getElementById('clearDestBtn').addEventListener('click', () => {
         destinationNodeKey = null; document.getElementById('destinationNodeInput').value = '';
-        window.clearStepTimeline(); drawNetwork();
+        if (typeof window.clearStepTimeline === 'function') window.clearStepTimeline(); clearStatsTable(); drawNetwork();
     });
     document.getElementById('generateBtn').addEventListener('click', () => {
         const count = parseInt(document.getElementById('nodeCountInput').value, 10);
         if (isNaN(count) || count < 10) return showToast("Specify at least 10 nodes.");
         generateProceduralGraph(count);
     });
-    // document.getElementById('saveMapBtn').addEventListener('click', saveGraphToFile);
 
     document.getElementById('mapPresetSelect').addEventListener('change', (e) => {
         if (e.target.value) {
@@ -704,20 +790,66 @@ async function init() {
     setupStepControls();
     window.addEventListener('resize', resizeCanvas);
 
-    // Initial switch to Surabaya default state
+    // Initial switch to default Surabaya territory maps layout
     await switchMapPreset('surabaya');
 
+    // INTELLIGENT ROUTING SELECTOR HANDLER
     document.getElementById('startBtn').addEventListener('click', () => {
         if (!startNodeKey || !destinationNodeKey) return showToast("Pick starting and destination points.");
         
-        const algo = document.getElementById('algorithmSelect').value;
-        let results;
-        if (algo === 'dijkstra') results = runDijkstra(startNodeKey, destinationNodeKey);
-        else if (algo === 'bfs') results = runBFS(startNodeKey, destinationNodeKey);
-        else if (algo === 'astar') results = runAStar(startNodeKey, destinationNodeKey);
+        if (typeof window.clearStepTimeline === 'function') window.clearStepTimeline();
         
-        if (!results || results.path.length === 0) return showToast("No valid route connects these locations.");
-        window.initStepTimeline(results);
+        const algorithmSelect = document.getElementById('algorithmSelect');
+        const isBenchmarkPage = !algorithmSelect; // If algorithmSelect layout target is absent, it's benchmark page!
+
+        if (isBenchmarkPage) {
+            // === BENCHMARK MODE ===
+            const t0 = performance.now();
+            const dijkstraRes = runDijkstra(startNodeKey, destinationNodeKey);
+            const t1 = performance.now();
+            
+            const t2 = performance.now();
+            const bfsRes = runBFS(startNodeKey, destinationNodeKey);
+            const t3 = performance.now();
+            
+            const t4 = performance.now();
+            const astarRes = runAStar(startNodeKey, destinationNodeKey);
+            const t5 = performance.now();
+
+            benchmarkCache.dijkstra = dijkstraRes;
+            benchmarkCache.bfs = bfsRes;
+            benchmarkCache.astar = astarRes;
+
+            updateStatsUI('dijkstra', dijkstraRes.visited.length, dijkstraRes.path.length > 0 ? calculateTotalPathWeight(dijkstraRes.path).toFixed(2) : "Unreachable", (t1 - t0));
+            updateStatsUI('bfs', bfsRes.visited.length, bfsRes.path.length > 0 ? calculateTotalPathWeight(bfsRes.path).toFixed(2) : "Unreachable", (t3 - t2));
+            updateStatsUI('astar', astarRes.visited.length, astarRes.path.length > 0 ? calculateTotalPathWeight(astarRes.path).toFixed(2) : "Unreachable", (t5 - t4));
+
+            if (astarRes.path.length === 0) {
+                return showToast("Calculated network paths are disconnected or unreachable.");
+            }
+
+            window.initStepTimeline();
+        } else {
+            // === STANDARD VISUALIZER SINGLE MODE ===
+            const chosenAlgo = algorithmSelect.value;
+            let result;
+            const t0 = performance.now();
+            
+            if (chosenAlgo === 'dijkstra') result = runDijkstra(startNodeKey, destinationNodeKey);
+            else if (chosenAlgo === 'bfs') result = runBFS(startNodeKey, destinationNodeKey);
+            else if (chosenAlgo === 'astar') result = runAStar(startNodeKey, destinationNodeKey);
+            
+            const t1 = performance.now();
+            
+            if (!result || result.path.length === 0) {
+                return showToast("Calculated network path is disconnected or unreachable.");
+            }
+            
+            const weight = calculateTotalPathWeight(result.path);
+            updateStatsUI(chosenAlgo, result.visited.length, weight.toFixed(2), (t1 - t0));
+            
+            window.initStepTimeline(result);
+        }
     });
 
     document.getElementById('resetBtn').addEventListener('click', () => {
@@ -729,7 +861,8 @@ async function init() {
             transform = { scale: 1, offsetX: 0, offsetY: 0 };
             document.getElementById('startNodeInput').value = '';
             document.getElementById('destinationNodeInput').value = '';
-            window.clearStepTimeline();
+            if (typeof window.clearStepTimeline === 'function') window.clearStepTimeline();
+            clearStatsTable();
             calculateBounds();
             drawNetwork();
         }
