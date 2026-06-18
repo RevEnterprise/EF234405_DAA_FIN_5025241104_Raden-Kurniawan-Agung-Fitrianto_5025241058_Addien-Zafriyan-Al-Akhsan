@@ -10,15 +10,14 @@
 [Website Link](https://reventerprise.github.io/EF234405_DAA_FIN_5025241104_Raden-Kurniawan-Agung-Fitrianto_5025241058_Addien-Zafriyan-Al-Akhsan/)
 
 
-# Beachmark Tutorial  
-- Use preset Number of Nodes (1.000, 5.000, 10.000+)
+# Website Tutorial  
+- Use preset number of nodes (1.000, 5.000, 10.000+) or with a producal map generator, create a new number of nodes
 - Pick an algorithm for that number of nodes (BFS, Dijkstra, A*)
-- Use the preset starting location and destination 
+- Use the preset starting location and destination or right-click on the map to assign the starting & destination point 
 - Run it
 - Change to other algorithm for that number of nodes
 - After all three algorithm done, change the number of nodes
-- Finished
-## Beachmark Visualization  
+## Wesbite Visualization  
 <p>
 <img width="244" height="144" alt="image" src="https://github.com/user-attachments/assets/d454af8c-7678-4708-ac3d-29579a3ad44c" />  
 <br>(Preset number of nodes)  
